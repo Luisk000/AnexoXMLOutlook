@@ -16,10 +16,10 @@ namespace VerificaXMLOutlook
     public class Program
     {
         static Timer time = new Timer();
-        static string folderPendente = @"C:\Users\Desktop\TesteEmail\Pendente";
-        static string folderAprovado = @"C:\Users\Desktop\TesteEmail\Aprovado";
-        static string folderSemCertificado = @"C:\Users\Desktop\TesteEmail\SemCertificado";
-        static string folderCertificadoInvalido = @"C:\Users\Desktop\TesteEmail\CertificadoInvalido";
+        static string folderPendente = @"C:\Users\ \Desktop\TesteEmail\Pendente";
+        static string folderAprovado = @"C:\Users\ \Desktop\TesteEmail\Aprovado";
+        static string folderSemCertificado = @"C:\Users\\ Desktop\TesteEmail\SemCertificado";
+        static string folderCertificadoInvalido = @"C:\Users\ \Desktop\TesteEmail\CertificadoInvalido";
 
 
         public static void Main(string[] args)
@@ -148,13 +148,28 @@ namespace VerificaXMLOutlook
                             if (passes == true)
                             {
                                 string destinationFile = Path.Combine(folderAprovado, Path.GetFileName(xmlName));
-                                File.Move(sourceFile, destinationFile);
+                                try
+                                {
+                                    File.Move(sourceFile, destinationFile);
+                                }
+                                catch
+                                {
+                                    File.Delete(sourceFile);
+                                }
+
                             }
 
                             else
                             {
                                 string destinationFile = Path.Combine(folderCertificadoInvalido, Path.GetFileName(xmlName));
-                                File.Move(sourceFile, destinationFile);
+                                try
+                                {
+                                    File.Move(sourceFile, destinationFile);
+                                }
+                                catch
+                                {
+                                    File.Delete(sourceFile);
+                                }
                             }
 
                         }
@@ -162,14 +177,29 @@ namespace VerificaXMLOutlook
                     catch
                     {
                         string destinationFile = Path.Combine(folderCertificadoInvalido, Path.GetFileName(xmlName));
-                        File.Move(sourceFile, destinationFile);
+                        try
+                        {
+                            File.Move(sourceFile, destinationFile);
+                        }
+                        catch
+                        {
+                            File.Delete(sourceFile);
+                        }
                     }
                 }
                 else
                 {
                     string destinationFile = Path.Combine(folderSemCertificado, Path.GetFileName(xmlName));
-                    File.Move(sourceFile, destinationFile);
+                    try
+                    {
+                        File.Move(sourceFile, destinationFile);
+                    }
+                    catch
+                    {
+                        File.Delete(sourceFile);
+                    }
                 }
+
 
             }
             finally
