@@ -5,35 +5,51 @@ using Limilabs.Client.IMAP;
 using Limilabs.Mail;
 using Limilabs.Mail.MIME;
 using System.IO;
-using System.Threading;
+using System.Timers;
+using System.Xml;
+using System.Security.Cryptography.Xml;
+using System.Security.Cryptography.X509Certificates;
+using System;
 
 namespace VerificaXMLOutlook
 {
     public class Program
     {
-
         public static void Main(string[] args)
         {
-            var timer = new Timer(GetAttatchments, null, 0, 5000);
+            VerificationTimer(true, 5000);
             CreateHostBuilder(args).Build().Run();
         }
 
-        private static void GetAttatchments(object o)
+
+        private static void VerificationTimer(bool active, double interval)
+        {
+            if (active == true)
+            {
+                Timer time = new Timer();
+                time.Interval = interval;
+                time.Elapsed += new ElapsedEventHandler(GetAttatchments);
+                time.Start();
+                GetAttatchments(time, null);
+            }
+        }
+
+
+        private static void GetAttatchments(object o, ElapsedEventArgs e)
         {
             using (Imap imap = new Imap())
             {
-
-                imap.Connect("server-imap");
-                imap.UseBestLogin("email", "senha");
+                imap.Connect("server-IMAP");
+                imap.UseBestLogin("email-oulook", "senha");
 
                 imap.SelectInbox();
                 //imap.Idle();
-                List<long> uids = imap.Search(Flag.All);
+                List<long> uids = imap.Search(Flag.Unseen);
                 foreach (long uid in uids)
                 {
                     var eml = imap.GetMessageByUID(uid);
                     IMail email = new MailBuilder().CreateFromEml(eml);
-                    SaveAttachments(email, @"C:\Users\documents");
+                    SaveAttachments(email, @"C:\Source");
                 }
                 imap.Close();
             }
@@ -54,7 +70,36 @@ namespace VerificaXMLOutlook
                     else
                     {
                         attachment.Save(Path.Combine(folder, attachment.SafeFileName));
+                        VerifyXML(attachment.FileName.ToString());
                     }
+                }
+            }
+        }
+
+
+        private static void VerifyXML(string xmlName)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.PreserveWhitespace = true;
+            xmlDoc.Load(xmlName);
+            SignedXml signedXml = new SignedXml(xmlDoc);
+            XmlNodeList nodeList = xmlDoc.GetElementsByTagName("Signature");
+            XmlNodeList certificates = xmlDoc.GetElementsByTagName("X509Certificate");
+            X509Certificate2 dcert2 = new X509Certificate2(Convert.FromBase64String(certificates[0].InnerText));
+            foreach (XmlElement element in nodeList)
+            {
+                signedXml.LoadXml(element);
+                bool passes = signedXml.CheckSignature(dcert2, true);
+                string sourceFile = @"C:\Source\" + xmlName;
+                if (passes == true)
+                {
+                    string destinationFile = @"C:\Users\documents\Aprovado\" + xmlName;
+                    File.Move(sourceFile, destinationFile);
+                }
+                else
+                {
+                    string destinationFile = @"C:\Users\documents\Reprovado\" + xmlName;
+                    File.Move(sourceFile, destinationFile);
                 }
             }
         }
