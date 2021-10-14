@@ -1,0 +1,7 @@
+{
+  "folder": "C:\\Users\\Desktop\\TesteEmail\\Aprovado",
+  "ConnectionStrings": {
+    "XmlDbConnection": "Data Source=; initial catalog=XmlDB;Trusted_Connection=true;MultipleActiveResultSets=true"
+  }
+}
+

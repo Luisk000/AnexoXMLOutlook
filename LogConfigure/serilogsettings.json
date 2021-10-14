@@ -17,16 +17,6 @@
         }
       }
     ]
-  },
-  "ImapConnection": {
-    "serverImap": "",
-    "email": "",
-    "senha": ""
-  },
-  "FolderLocations": {
-    "folderPendente": "C:\\Users\\Desktop\\TesteEmail\\Pendente",
-    "folderAprovado": "C:\\Users\\Desktop\\TesteEmail\\Aprovado",
-    "folderSemCertificado": "C:\\Users\\Desktop\\TesteEmail\\SemCertificado",
-    "folderCertificadoInvalido": "C:\\Users\\Desktop\\TesteEmail\\CertificadoInvalido"
   }
 }
+

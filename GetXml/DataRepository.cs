@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Timers;
 
-namespace VerificaXMLOutlook
+namespace GetXml
 {
     public class DataRepository
     {
         private static IConfigurationRoot configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
+                .AddJsonFile("loginsettings.json", optional: false, reloadOnChange: true).Build();
 
         protected readonly Timer time = new Timer();
 

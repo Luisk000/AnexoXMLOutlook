@@ -9,18 +9,33 @@ using System.Security.Cryptography.Xml;
 using System.Timers;
 using System.Xml;
 
-
-namespace VerificaXMLOutlook
+namespace GetXml
 {
-    public class GetXmlEmail : DataRepository
+    public class GetXmlEmail : DataRepository   
     {
         public GetXmlEmail()
         {
-            ValidateFolder();
             VerificationTimer(true, 5000);
         }
 
-        private void ValidateFolder()
+        private void VerificationTimer(bool active, double interval)
+        {
+            if (active == true)
+            {
+                time.Interval = interval;
+                time.Elapsed += new ElapsedEventHandler(ValidateFolder);
+                time.Elapsed += new ElapsedEventHandler(GetAttatchments);
+                time.Start();
+            }
+            else
+            {
+                ValidateFolder(time, null);
+                GetAttatchments(time, null);
+                Serilog.Log.Warning("O timer está desativado");
+            }
+        }
+
+        private void ValidateFolder(object o, ElapsedEventArgs e)
         {
             if (!Directory.Exists(folderPendente))
                 Directory.CreateDirectory(folderPendente);
@@ -35,22 +50,6 @@ namespace VerificaXMLOutlook
                 Directory.CreateDirectory(folderCertificadoInvalido);
         }
 
-        private void VerificationTimer(bool active, double interval)
-        {
-            if (active == true)
-            {
-                time.Interval = interval;
-                time.Elapsed += new ElapsedEventHandler(GetAttatchments);
-
-                time.Start();
-                //GetAttatchments(time, null);              
-            }
-            else
-            {
-                Serilog.Log.Warning("O timer está desativado");
-            }
-        }
-
         private void GetAttatchments(object o, ElapsedEventArgs e)
         {
             time.Stop();
@@ -63,7 +62,6 @@ namespace VerificaXMLOutlook
                     imap.UseBestLogin(email, senha);
 
                     imap.SelectInbox();
-                    //imap.Idle();
                     List<long> uids = imap.Search(Flag.All);
                     foreach (long uid in uids)
                     {
@@ -115,27 +113,30 @@ namespace VerificaXMLOutlook
             {
                 SignedXml signedXml = new SignedXml(xmlDoc);
                 XmlNodeList nodeList = xmlDoc.GetElementsByTagName("Signature");
-                XmlNodeList certificates = xmlDoc.GetElementsByTagName("X509Certificate");
+                XmlNodeList certificates509 = xmlDoc.GetElementsByTagName("X509Certificate");
 
                 string sourceFile = Path.Combine(folderPendente, xmlName);
 
-                if (certificates.Count > 0)
+                if (certificates509.Count > 0)
                 {
                     try
                     {
-                        X509Certificate2 dcert2 = new X509Certificate2(Convert.FromBase64String(certificates[0].InnerText));
+                        X509Certificate2 dcert2 = new X509Certificate2(Convert.FromBase64String(certificates509[0].InnerText));
+
                         foreach (XmlElement element in nodeList)
                         {
                             signedXml.LoadXml(element);
                             bool passes = signedXml.CheckSignature(dcert2, true);
+                            bool validKey = signedXml.CheckSignature(dcert2.PublicKey.Key);
 
-                            if (passes == true)
+                            if (passes == true && validKey == true)
                             {
                                 string destinationFile = Path.Combine(folderAprovado, Path.GetFileName(xmlName));
                                 try
                                 {
                                     File.Move(sourceFile, destinationFile);
                                     Serilog.Log.Information("Arquivo XML autêntico recebido");
+
                                 }
                                 catch
                                 {
