@@ -1,14 +1,16 @@
 {
   "ImapConnection": {
     "serverImap": "outlook.office365.com",
-    "email": "...@outlook.com",
+    "email": " @outlook.com",
     "senha": ""
   },
   "FolderLocations": {
     "folderPendente": "C:\\Users\\Desktop\\TesteEmail\\Pendente",
     "folderAprovado": "C:\\Users\\Desktop\\TesteEmail\\Aprovado",
-    "folderSemCertificado": "C:\\Users\\Desktop\\TesteEmail\\SemCertificado",
-    "folderCertificadoInvalido": "C:\\Users\\Desktop\\TesteEmail\\CertificadoInvalido"
+    "folderSemCertificado": "C:\\Users\\Desktop\\TesteEmail\\Reprovado\\SemCertificado",
+    "folderCertificadoInvalido": "C:\\Users\\Desktop\\TesteEmail\\Reprovado\\CertificadoInvalido",
+    "folderFalha": "C:\\Users\\Desktop\\TesteEmail\\Aprovado\\Falha",
+    "folderConcluido": "C:\\Users\\Desktop\\TesteEmail\\Aprovado\\Concluido"
   }
 }
 

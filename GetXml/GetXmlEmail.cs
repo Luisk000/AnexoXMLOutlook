@@ -11,31 +11,15 @@ using System.Xml;
 
 namespace GetXml
 {
-    public class GetXmlEmail : DataRepository   
+    public class GetXmlEmail : DataRepository
     {
-        public GetXmlEmail()
+        public void Process()
         {
-            VerificationTimer(true, 5000);
+            ValidateFolder();
+            GetAttatchments();
         }
 
-        private void VerificationTimer(bool active, double interval)
-        {
-            if (active == true)
-            {
-                time.Interval = interval;
-                time.Elapsed += new ElapsedEventHandler(ValidateFolder);
-                time.Elapsed += new ElapsedEventHandler(GetAttatchments);
-                time.Start();
-            }
-            else
-            {
-                ValidateFolder(time, null);
-                GetAttatchments(time, null);
-                Serilog.Log.Warning("O timer está desativado");
-            }
-        }
-
-        private void ValidateFolder(object o, ElapsedEventArgs e)
+        private void ValidateFolder()
         {
             if (!Directory.Exists(folderPendente))
                 Directory.CreateDirectory(folderPendente);
@@ -50,19 +34,18 @@ namespace GetXml
                 Directory.CreateDirectory(folderCertificadoInvalido);
         }
 
-        private void GetAttatchments(object o, ElapsedEventArgs e)
+        private void GetAttatchments()
         {
-            time.Stop();
-
             try
             {
                 using (Imap imap = new Imap())
                 {
                     imap.Connect(serverImap);
                     imap.UseBestLogin(email, senha);
-
                     imap.SelectInbox();
+
                     List<long> uids = imap.Search(Flag.All);
+
                     foreach (long uid in uids)
                     {
                         var eml = imap.GetMessageByUID(uid);
@@ -72,7 +55,6 @@ namespace GetXml
                     }
                     imap.Close();
                 }
-                time.Start();
             }
             catch (Exception ex)
             {
@@ -80,28 +62,25 @@ namespace GetXml
             }
         }
 
-
         private void SaveAttachments(IMail email, string folder)
         {
             foreach (MimeData attachment in email.Attachments)
             {
-                if (attachment.ContentType.ToString().Equals("text/xml"))
-                {
-                    if (attachment is IMailContainer)
-                    {
-                        IMail attachedMessage = ((IMailContainer)attachment).Message;
-                        SaveAttachments(attachedMessage, folder);
-                    }
-                    else
-                    {
-                        attachment.Save(Path.Combine(folder, attachment.SafeFileName));
-                    }
+                var file = Path.Combine(folder, attachment.SafeFileName);
+                Path.Combine(folder, attachment.SafeFileName);
 
-                    VerifyXML(Path.Combine(folder, attachment.SafeFileName));
+                if (attachment.ContentType.ToString().Equals("text/xml")
+                    && !File.Exists(Path.Combine(folderAprovado, attachment.SafeFileName))
+                    && !File.Exists(Path.Combine(folderCertificadoInvalido, attachment.SafeFileName))
+                    && !File.Exists(Path.Combine(folderSemCertificado, attachment.SafeFileName))
+                    && !File.Exists(Path.Combine(folderFalha, attachment.SafeFileName))
+                    && !File.Exists(Path.Combine(folderConcluido, attachment.SafeFileName)))
+                {
+                    attachment.Save(Path.Combine(file));
+                    VerifyXML(Path.Combine(file));
                 }
             }
         }
-
 
         private void VerifyXML(string xmlName)
         {
@@ -109,92 +88,63 @@ namespace GetXml
             xmlDoc.PreserveWhitespace = true;
             xmlDoc.Load(xmlName);
 
+            SignedXml signedXml = new SignedXml(xmlDoc);
+            XmlNodeList nodeList = xmlDoc.GetElementsByTagName("Signature");
+            XmlNodeList certificates509 = xmlDoc.GetElementsByTagName("X509Certificate");
+
+            string sourceFile = Path.Combine(folderPendente, xmlName);
+
+            if (certificates509.Count == 0)
+            {
+                Move(sourceFile, xmlName, folderSemCertificado);
+                return;
+            }
+
             try
             {
-                SignedXml signedXml = new SignedXml(xmlDoc);
-                XmlNodeList nodeList = xmlDoc.GetElementsByTagName("Signature");
-                XmlNodeList certificates509 = xmlDoc.GetElementsByTagName("X509Certificate");
-
-                string sourceFile = Path.Combine(folderPendente, xmlName);
-
-                if (certificates509.Count > 0)
+                X509Certificate2 dcert2 = new X509Certificate2(Convert.FromBase64String(certificates509[0].InnerText));
+                foreach (XmlElement element in nodeList)
                 {
-                    try
-                    {
-                        X509Certificate2 dcert2 = new X509Certificate2(Convert.FromBase64String(certificates509[0].InnerText));
+                    signedXml.LoadXml(element);
 
-                        foreach (XmlElement element in nodeList)
-                        {
-                            signedXml.LoadXml(element);
-                            bool passes = signedXml.CheckSignature(dcert2, true);
-                            bool validKey = signedXml.CheckSignature(dcert2.PublicKey.Key);
+                    bool passes = signedXml.CheckSignature(dcert2, true);
 
-                            if (passes == true && validKey == true)
-                            {
-                                string destinationFile = Path.Combine(folderAprovado, Path.GetFileName(xmlName));
-                                try
-                                {
-                                    File.Move(sourceFile, destinationFile);
-                                    Serilog.Log.Information("Arquivo XML autêntico recebido");
+                    if (passes)
+                        Move(sourceFile, xmlName, folderAprovado);
 
-                                }
-                                catch
-                                {
-                                    File.Delete(sourceFile);
-                                }
-
-                            }
-
-                            else
-                            {
-                                string destinationFile = Path.Combine(folderCertificadoInvalido, Path.GetFileName(xmlName));
-                                try
-                                {
-                                    File.Move(sourceFile, destinationFile);
-                                    Serilog.Log.Warning("Arquivo XML com certificado inválido recebido");
-                                }
-                                catch
-                                {
-                                    File.Delete(sourceFile);
-                                }
-                            }
-
-                        }
-                    }
-                    catch
-                    {
-                        string destinationFile = Path.Combine(folderCertificadoInvalido, Path.GetFileName(xmlName));
-                        try
-                        {
-                            File.Move(sourceFile, destinationFile);
-                            Serilog.Log.Warning("Arquivo XML com certificado inválido recebido");
-                        }
-                        catch
-                        {
-                            File.Delete(sourceFile);
-                        }
-                    }
+                    else
+                        Move(sourceFile, xmlName, folderCertificadoInvalido);
                 }
-                else
-                {
-                    string destinationFile = Path.Combine(folderSemCertificado, Path.GetFileName(xmlName));
-                    try
-                    {
-                        File.Move(sourceFile, destinationFile);
-                        Serilog.Log.Warning("Arquivo XML sem certificado recebido");
-                    }
-                    catch
-                    {
-                        File.Delete(sourceFile);
-                    }
-                }
+            }
+            catch
+            {
+                Move(sourceFile, xmlName, folderCertificadoInvalido);
             }
             finally
             {
-                xmlDoc = null;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
+        }
+
+        private void Move(string sourceFile, string xmlName, string folder)
+        {
+            string destinationFile = Path.Combine(folder, Path.GetFileName(xmlName));
+
+            if (!File.Exists(destinationFile))
+                File.Move(sourceFile, destinationFile);
+
+            if (folder == folderAprovado)
+                Serilog.Log.Information("Arquivo XML autêntico recebido");
+
+            if (folder == folderCertificadoInvalido)
+                Serilog.Log.Warning("Arquivo XML com certificado inválido recebido");
+
+            if (folder == folderSemCertificado)
+                Serilog.Log.Warning("Arquivo XML sem certificado recebido");
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
     }
 }

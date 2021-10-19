@@ -1,5 +1,7 @@
 {
   "folder": "C:\\Users\\Desktop\\TesteEmail\\Aprovado",
+  "folderFalha": "C:\\Users\\Desktop\\TesteEmail\\Aprovado\\Falha",
+  "folderConcluido": "C:\\Users\\Desktop\\TesteEmail\\Aprovado\\Concluido",
   "ConnectionStrings": {
     "XmlDbConnection": "Data Source=; initial catalog=XmlDB;Trusted_Connection=true;MultipleActiveResultSets=true"
   }

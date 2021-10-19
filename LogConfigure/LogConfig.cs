@@ -3,15 +3,14 @@ using Serilog;
 
 namespace LogConfigure
 {
-    public class LogConfig
+    public class SerilogConfig
     {
         private IConfigurationRoot configuration = new ConfigurationBuilder()
                 .AddJsonFile("serilogsettings.json", optional: false, reloadOnChange: true).Build();
-        public LogConfig()
+        public void Config()
         {
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
 
         }
     }
-
 }

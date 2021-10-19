@@ -10,15 +10,18 @@ namespace ImportXml.Models
 {
     public class XmlFile
     {
-        // public int Id { get; set; }
         [Key]
         public string nfeProc_NFe_infNFe_____Id { get; set; } //propriedade
+
         public string XmlName { get; set; }
+        public string xml____version { get; set; }
+        public string xml____encoding { get; set; }
+
 
         public string nfeProc____versao { get; set; } //propriedade
         public string nfeProc____xmlns { get; set; } //propriedade
         public string nfeProc_Nfe_infNFe____versao { get; set; } //propriedade
-       
+
 
         public string nfeProc_NFe_infNFe_ide_cUF { get; set; }
         public string nfeProc_NFe_infNFe_ide_cNF { get; set; }
@@ -28,7 +31,7 @@ namespace ImportXml.Models
         public string nfeProc_NFe_infNFe_ide_serie { get; set; }
         public string nfeProc_NFe_infNFe_ide_nNF { get; set; }
         public string nfeProc_NFe_infNFe_ide_dhEmi { get; set; } //DateTime
-        public string nfeProc_NFe_infNFe_ide_dhSaiEnt { get; set; }
+        public string nfeProc_NFe_infNFe_ide_dhSaiEnt { get; set; } //novo
         public string nfeProc_NFe_infNFe_ide_tpNF { get; set; }
         public string nfeProc_NFe_infNFe_ide_idDest { get; set; }
         public string nfeProc_NFe_infNFe_ide_cMunFG { get; set; }
@@ -39,7 +42,7 @@ namespace ImportXml.Models
         public string nfeProc_NFe_infNFe_ide_finNFe { get; set; }
         public string nfeProc_NFe_infNFe_ide_indFinal { get; set; }
         public string nfeProc_NFe_infNFe_ide_indPres { get; set; }
-        public string nfeProc_NFe_infNFe_ide_indIntermed { get; set; }    //novo   
+        public string nfeProc_NFe_infNFe_ide_indIntermed { get; set; } //novo   
         public string nfeProc_NFe_infNFe_ide_procEmi { get; set; }
         public string nfeProc_NFe_infNFe_ide_verProc { get; set; }
 
@@ -130,9 +133,10 @@ namespace ImportXml.Models
         public string nfeProc_NFe_Signature_SignedInfo_CanonicalizationMethod____Algorithm { get; set; } //propriedade 
         public string nfeProc_NFe_Signature_SignedInfo_SignatureMethod____Algorithm { get; set; } //propriedade 
         public string nfeProc_NFe_Signature_SignedInfo_Reference____URI { get; set; } //propriedade
+        //Algorithms
         public string nfeProc_NFe_Signature_SignedInfo_Reference_DigestMethod____Algorithm { get; set; } //propriedade
         public string nfeProc_NFe_Signature_SignedInfo_Reference_DigestValue { get; set; }
-        public string nfeProc_NFe_Signature_SignatureValue { get; set; } 
+        public string nfeProc_NFe_Signature_SignatureValue { get; set; }
         public string nfeProc_NFe_Signature_KeyInfo_X509Data_X509Certificate { get; set; }
 
 

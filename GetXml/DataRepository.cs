@@ -14,6 +14,8 @@ namespace GetXml
         protected string folderAprovado = configuration.GetSection("FolderLocations:folderAprovado").Value;
         protected string folderSemCertificado = configuration.GetSection("FolderLocations:folderSemCertificado").Value;
         protected string folderCertificadoInvalido = configuration.GetSection("FolderLocations:folderCertificadoInvalido").Value;
+        protected string folderFalha = configuration.GetSection("FolderLocations:folderFalha").Value;
+        protected string folderConcluido = configuration.GetSection("FolderLocations:folderConcluido").Value;
         protected string serverImap = configuration.GetSection("ImapConnection:serverImap").Value;
         protected string email = configuration.GetSection("ImapConnection:email").Value;
         protected string senha = configuration.GetSection("ImapConnection:senha").Value;
