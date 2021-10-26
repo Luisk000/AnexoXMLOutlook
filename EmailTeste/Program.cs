@@ -23,25 +23,25 @@ namespace VerificaXmlOutlook
             {
                 log.Config();
 
-            Log.Information("Inicializou o EmailTeste com sucesso!");
-            Log.Debug("Configurando o Timer...");
+                Log.Information("Inicializou o EmailTeste com sucesso!");
+                Log.Debug("Configurando o Timer...");
 
-            time.Interval = 5000;
-            time.AutoReset = true;
-            time.Start();
+                time.Interval = 5000;
+                time.AutoReset = true;
+                time.Start();
 
-            time.Elapsed += new ElapsedEventHandler(ProcessarTimer);
+                time.Elapsed += new ElapsedEventHandler(ProcessarTimer);
 
-        }
+            }
             catch (Exception ex)
             {
                 EventLog eLog = new EventLog("Application");
-        eLog.Source = "Application";
+                eLog.Source = "Application";
                 eLog.WriteEntry("OCORREU UMA FALHA: " + ex.ToString(), EventLogEntryType.Error);
                 Log.Fatal(ex, "Algo deu errado");
             }
 
-    CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         private static void ProcessarTimer(object sender, ElapsedEventArgs e)

@@ -28,5 +28,6 @@ namespace ImportXml.Models
         public DbSet<XmlFile> Files { get; set; }
         public DbSet<XmlFileTransformAlgorithm> Algorithms { get; set; }
         public DbSet<XmlFileDet> Dets { get; set; }
+        public DbSet<XmlFileNaoRegistrado> NRs { get; set; }
     }
 }
