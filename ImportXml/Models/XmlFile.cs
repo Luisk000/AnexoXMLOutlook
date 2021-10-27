@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ImportXml.Models
 {
@@ -96,11 +90,46 @@ namespace ImportXml.Models
         public string nfeProc_NFe_infNFe_dest_IM { get; set; }
         public string nfeProc_NFe_infNFe_dest_email { get; set; }
 
-        //public string nfeProc_NFe_infNFe_retirada { get; set; }
-        //public string nfeProc_NFe_infNFe_entrega { get; set; }
 
-        //public string nfeProc_NFe_infNFe_autXML_CNPJ { get; set; }
-        //public string nfeProc_NFe_infNFe_autXML_CPF { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_CNPJ { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_xNome { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_xLgr { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_nro { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_xBairro { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_cMun { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_xMun { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_UF { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_CEP { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_cPais { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_xPais { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_fone { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_email { get; set; }
+        public string nfeProc_NFe_infNFe_retirada_IE { get; set; }
+
+
+
+        public string nfeProc_NFe_infNFe_entrega_CNPJ { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_xNome { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_xLgr { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_nro { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_xBairro { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_cMun { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_xMun { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_UF { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_CEP { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_cPais { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_xPais { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_fone { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_email { get; set; }
+        public string nfeProc_NFe_infNFe_entrega_IE { get; set; }
+
+
+
+        public string nfeProc_NFe_infNFe_autXml_CNPJ { get; set; }
+        public string nfeProc_NFe_infNFe_autXml_CPF { get; set; }
+
+
+
 
         public string nfeProc_NFe_infNFe_total_ICMSTot_vBC { get; set; }
         public string nfeProc_NFe_infNFe_total_ICMSTot_vICMS { get; set; }

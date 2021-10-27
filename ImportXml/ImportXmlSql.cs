@@ -354,6 +354,129 @@ namespace ImportXml
 
                                 }
 
+                                else if (infNFe[h].Name == "retirada")
+                                {
+                                    XmlNodeList retirada = infNFe[h].ChildNodes;
+
+                                    for (int i = 0; i < retirada.Count; i++)
+                                    {
+                                        if (retirada[i].Name == "CNPJ")
+                                            xml.nfeProc_NFe_infNFe_retirada_CNPJ = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "xNome")
+                                            xml.nfeProc_NFe_infNFe_retirada_xNome = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "xLgr")
+                                            xml.nfeProc_NFe_infNFe_retirada_xLgr = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "nro")
+                                            xml.nfeProc_NFe_infNFe_retirada_nro = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "xBairro")
+                                            xml.nfeProc_NFe_infNFe_retirada_xBairro = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "cMun")
+                                            xml.nfeProc_NFe_infNFe_retirada_cMun = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "xMun")
+                                            xml.nfeProc_NFe_infNFe_retirada_xMun = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "UF")
+                                            xml.nfeProc_NFe_infNFe_retirada_UF = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "CEP")
+                                            xml.nfeProc_NFe_infNFe_retirada_CEP = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "cPais")
+                                            xml.nfeProc_NFe_infNFe_retirada_cPais = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "xPais")
+                                            xml.nfeProc_NFe_infNFe_retirada_xPais = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "fone")
+                                            xml.nfeProc_NFe_infNFe_retirada_fone = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "email")
+                                            xml.nfeProc_NFe_infNFe_retirada_email = retirada[i].InnerText;
+
+                                        else if (retirada[i].Name == "IE")
+                                            xml.nfeProc_NFe_infNFe_retirada_IE = retirada[i].InnerText;
+
+                                        else
+                                            NaoRegistrado(retirada[i].Name, retirada[i].InnerText, xml);
+                                    }
+                                }
+
+                                else if (infNFe[h].Name == "entrega")
+                                {
+                                    XmlNodeList entrega = infNFe[h].ChildNodes;
+
+                                    for (int i = 0; i < entrega.Count; i++)
+                                    {
+                                        if (entrega[i].Name == "CNPJ")
+                                            xml.nfeProc_NFe_infNFe_entrega_CNPJ = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "xNome")
+                                            xml.nfeProc_NFe_infNFe_entrega_xNome = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "xLgr")
+                                            xml.nfeProc_NFe_infNFe_entrega_xLgr = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "nro")
+                                            xml.nfeProc_NFe_infNFe_entrega_nro = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "xBairro")
+                                            xml.nfeProc_NFe_infNFe_entrega_xBairro = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "cMun")
+                                            xml.nfeProc_NFe_infNFe_entrega_cMun = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "xMun")
+                                            xml.nfeProc_NFe_infNFe_entrega_xMun = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "UF")
+                                            xml.nfeProc_NFe_infNFe_entrega_UF = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "CEP")
+                                            xml.nfeProc_NFe_infNFe_entrega_CEP = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "cPais")
+                                            xml.nfeProc_NFe_infNFe_entrega_cPais = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "xPais")
+                                            xml.nfeProc_NFe_infNFe_entrega_xPais = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "fone")
+                                            xml.nfeProc_NFe_infNFe_entrega_fone = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "email")
+                                            xml.nfeProc_NFe_infNFe_entrega_email = entrega[i].InnerText;
+
+                                        else if (entrega[i].Name == "IE")
+                                            xml.nfeProc_NFe_infNFe_entrega_IE = entrega[i].InnerText;
+
+                                        else
+                                            NaoRegistrado(entrega[i].Name, entrega[i].InnerText, xml);
+                                    }
+                                }
+
+                                else if (infNFe[h].Name == "autXML")
+                                {
+                                    XmlNodeList autXml = infNFe[h].ChildNodes;
+
+                                    for (int i = 0; i < autXml.Count; i++)
+                                    {
+                                        if (autXml[i].Name == "CNPJ")
+                                            xml.nfeProc_NFe_infNFe_autXml_CNPJ = autXml[i].InnerText;
+
+                                        else if (autXml[i].Name == "CPF")
+                                            xml.nfeProc_NFe_infNFe_autXml_CPF = autXml[i].InnerText;
+
+                                        else
+                                            NaoRegistrado(autXml[i].Name, autXml[i].InnerText, xml);
+                                    }
+                                }
+
                                 else if (infNFe[h].Name == "det")
                                 {
                                     XmlFileDet xmlDet = new XmlFileDet();
